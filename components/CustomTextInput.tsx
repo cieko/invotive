@@ -4,18 +4,14 @@ import { Text, TextInput, TextInputProps, View } from "react-native";
 type CustomTextInputProps = {
   label: string;
   name: string;
-  control: Control<FieldValues>;
-  rules?: RegisterOptions;
 } & TextInputProps;
 
-export default function CustomTextInput({ label, name, control, rules, ...props }: CustomTextInputProps) {
+export default function CustomTextInput({ label, name, ...props }: CustomTextInputProps) {
   const {
     field: { onChange, onBlur, value },
     fieldState: { error },
   } = useController({
     name,
-    control,
-    rules,
   });
 
   return (

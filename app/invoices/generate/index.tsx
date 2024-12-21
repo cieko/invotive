@@ -1,11 +1,24 @@
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+
 import { FormProvider, useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 import { Button } from "~/components/Button";
 import CustomTextInput from "~/components/CustomTextInput";
 import KeyboardAwareScrollView from "~/components/KeyboardAwareScrollView";
 
+const senderInfoSchema = z.object({
+  name: z.string({ required_error: 'Name is Required' }).min(1, 'Name is required'),
+  address: z.string({ required_error: 'Address is Required' }).min(1, 'Address is required'),
+  taxId: z.string().optional(),
+})
+
+type SenderInfo = z.infer<typeof senderInfoSchema>
+
 export default function GenerateInvoice() {
-  const form = useForm();
+  const form = useForm<SenderInfo>({
+    resolver: zodResolver(senderInfoSchema),
+  });
 
   const onSubmit = (data: any) => {
     console.log(data);
@@ -21,34 +34,18 @@ export default function GenerateInvoice() {
             name="name"
             label="Name"
             placeholder="Enter your name"
-            control={form.control}
-            rules={{
-              required: "Name is required!",
-              maxLength: { value: 50, message: "Name cannot exceed 50 characters!" },
-            }}
+
           />
           <CustomTextInput
             name="address"
             label="Address"
             multiline
             placeholder="Enter your address"
-            control={form.control}
-            rules={{
-              required: "Address is required!",
-            }}
           />
           <CustomTextInput
             name="taxId"
             label="Tax ID"
             placeholder="Enter your Tax ID"
-            control={form.control}
-            rules={{
-              required: "Tax ID is required!",
-              pattern: {
-                value: /^[0-9]{9}$/,
-                message: "Tax ID must be a 9-digit number!",
-              },
-            }}
           />
         </View>
 

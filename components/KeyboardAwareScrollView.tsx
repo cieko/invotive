@@ -39,7 +39,7 @@ export default function KeyboardAwareScrollView({ children }: PropsWithChildren)
           gap: 5,
         }}
       >
-        <SafeAreaView edges={["bottom"]} style={{ flex: 1 }}>
+        <SafeAreaView edges={["bottom"]} style={{ flex: 1, gap: 10 }}>
           {children}
         </SafeAreaView>
       </ScrollView>
