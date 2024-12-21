@@ -6,7 +6,6 @@ import { Text, View } from "react-native";
 import { Button } from "~/components/Button";
 import CustomTextInput from "~/components/CustomTextInput";
 import KeyboardAwareScrollView from "~/components/KeyboardAwareScrollView";
-import { router } from 'expo-router';
 
 const senderInfoSchema = z.object({
   name: z.string({ required_error: 'Name is Required' }).min(1, 'Name is required'),
@@ -19,26 +18,23 @@ type SenderInfo = z.infer<typeof senderInfoSchema>
 export default function GenerateInvoice() {
   const form = useForm<SenderInfo>({
     resolver: zodResolver(senderInfoSchema),
-    defaultValues: {
-      name: 'Arnold',
-      address: 'Mumbai, bandra'
-    }
   });
 
   const onSubmit = (data: any) => {
-    router.push('/invoices/generate/recipient')
+    console.log(data);
   };
 
   return (
     <KeyboardAwareScrollView>
       <FormProvider {...form}>
-        <Text className="mb-5 text-2xl font-bold">Sender Info</Text>
+        <Text className="mb-5 text-2xl font-bold">Recipient Info</Text>
 
         <View className="gap-2">
           <CustomTextInput
             name="name"
             label="Name"
             placeholder="Enter your name"
+
           />
           <CustomTextInput
             name="address"
