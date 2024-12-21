@@ -18,11 +18,11 @@ export default function CustomTextInput({ label, name, ...props }: CustomTextInp
     <View>
       <Text className="mb-2 text-lg">{label}</Text>
       <TextInput
-        {...props}
-        value={value}
+        value={value?.toString()}
         onChangeText={onChange}
         className={`rounded border border-gray-300 p-4 ${props.className}`}
         onBlur={onBlur}
+        {...props}
       />
       {error?.message && (
         <Text className="text-red-500 mt-2">{error.message}</Text>

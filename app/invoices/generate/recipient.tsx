@@ -6,6 +6,7 @@ import { Text, View } from "react-native";
 import { Button } from "~/components/Button";
 import CustomTextInput from "~/components/CustomTextInput";
 import KeyboardAwareScrollView from "~/components/KeyboardAwareScrollView";
+import { router } from 'expo-router';
 
 const senderInfoSchema = z.object({
   name: z.string({ required_error: 'Name is Required' }).min(1, 'Name is required'),
@@ -21,7 +22,7 @@ export default function GenerateInvoice() {
   });
 
   const onSubmit = (data: any) => {
-    console.log(data);
+    router.push('/invoices/generate/invoice-info')
   };
 
   return (
