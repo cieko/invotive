@@ -1,15 +1,16 @@
 import { create } from 'zustand';
+import { Invoice, BusinessEntity } from '~/schema/invoice';
 
-export interface BearState {
-  bears: number;
-  increasePopulation: () => void;
-  removeAllBears: () => void;
-  updateBears: (newBears: number) => void;
+export interface InvoiceState {
+  newInvoice: Partial<Invoice>;
+  addSenderInfo: (senderInfo: BusinessEntity) => void;
+  addRecipientInfo: (senderInfo: BusinessEntity) => void;
 }
 
-export const useStore = create<BearState>((set) => ({
-  bears: 0,
-  increasePopulation: () => set((state) => ({ bears: state.bears + 1 })),
-  removeAllBears: () => set({ bears: 0 }),
-  updateBears: (newBears) => set({ bears: newBears }),
+export const useStore = create<InvoiceState>((set) => ({
+  newInvoice: {},
+  addSenderInfo: (senderInfo) =>
+    set((state) => ({ newInvoice: { ...state.newInvoice, senderInfo } })),
+  addRecipientInfo: (recipientInfo) =>
+    set((state) => ({ newInvoice: { ...state.newInvoice, recipientInfo } })),
 }));

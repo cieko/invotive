@@ -1,31 +1,35 @@
 import { View, Text } from "react-native";
 import { Button } from "~/components/Button";
 import KeyboardAwareScrollView from "~/components/KeyboardAwareScrollView";
+import { useStore } from "~/store/store";
 
 export default function InvoiceSummary() {
+  const newInvoice = useStore((data) => data.newInvoice); // this method is to avoid unnecessary re-renderings
   return (
     <KeyboardAwareScrollView>
       <View className="gap-4">
 
-        <View className="rounded-lg bg-gray-50 p-4">
-          <Text className="mb-2 text-lg font-semibold">Sender Information</Text>
-          <View className="gap-1">
-            <Text>John Doe</Text>
-            <Text>123 Business Street</Text>
-            <Text>City, State 12345</Text>
-            <Text>john@example.com</Text>
+        {newInvoice?.sender ? (
+          <View className="rounded-lg bg-gray-50 p-4">
+            <Text className="mb-2 text-lg font-semibold">Sender Information</Text>
+            <View className="gap-1">
+              <Text>{newInvoice.sender?.name}</Text>
+              <Text>{newInvoice.sender?.address}</Text>
+              <Text>{newInvoice.sender?.taxId}</Text>
+            </View>
           </View>
-        </View>
+        ) : null}
 
-        <View className="rounded-lg bg-gray-50 p-4">
-          <Text className="mb-2 text-lg font-semibold">Recipient Information</Text>
-          <View className="gap-1">
-            <Text>Jane Smith</Text>
-            <Text>456 Client Avenue</Text>
-            <Text>City, State 67890</Text>
-            <Text>jane@example.com</Text>
+        {newInvoice?.recipient ? (
+          <View className="rounded-lg bg-gray-50 p-4">
+            <Text className="mb-2 text-lg font-semibold">Recipient Information</Text>
+            <View className="gap-1">
+              <Text>{newInvoice.recipient?.name}</Text>
+              <Text>{newInvoice.recipient?.address}</Text>
+              <Text>{newInvoice.recipient?.taxId}</Text>
+            </View>
           </View>
-        </View>
+        ) : null}
 
         <View className="rounded-lg bg-gray-50 p-4">
           <Text className="mb-2 text-lg font-semibold">Invoice Details</Text>
@@ -83,7 +87,7 @@ export default function InvoiceSummary() {
         <Button
           title="Generate Invoice"
           className="mt-4"
-          onPress={() => {}}
+          onPress={() => { }}
         />
 
       </View>

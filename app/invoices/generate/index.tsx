@@ -7,25 +7,22 @@ import { Button } from "~/components/Button";
 import CustomTextInput from "~/components/CustomTextInput";
 import KeyboardAwareScrollView from "~/components/KeyboardAwareScrollView";
 import { router } from 'expo-router';
-
-const senderInfoSchema = z.object({
-  name: z.string({ required_error: 'Name is Required' }).min(1, 'Name is required'),
-  address: z.string({ required_error: 'Address is Required' }).min(1, 'Address is required'),
-  taxId: z.string().optional(),
-})
-
-type SenderInfo = z.infer<typeof senderInfoSchema>
+import { useStore } from '~/store/store';
+import { BusinessEntity, businessEntityInfoSchema } from '~/schema/invoice';
 
 export default function GenerateInvoice() {
-  const form = useForm<SenderInfo>({
-    resolver: zodResolver(senderInfoSchema),
+  const addSenderInfo = useStore((data) => data.addSenderInfo);
+
+  const form = useForm<BusinessEntity>({
+    resolver: zodResolver(businessEntityInfoSchema),
     defaultValues: {
       name: 'Arnold',
       address: 'Mumbai, bandra'
     }
   });
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: BusinessEntity) => {
+    addSenderInfo(data)
     router.push('/invoices/generate/recipient')
   };
 
