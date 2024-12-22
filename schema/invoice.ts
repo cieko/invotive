@@ -18,7 +18,18 @@ export const invoiceInfoSchema = z.object({
 
 export type InvoiceInfo = z.infer<typeof invoiceInfoSchema>
 
+export const invoiceItemSchema = z.object({
+  name: z.string({ required_error: 'Name is required' }).min(1, 'Name is required'),
+  quantity: z.number({ required_error: 'Quantity is required' }),
+  price: z
+    .string({ required_error: "Required" }).min(1, 'Required')
+    .refine((val) => /^\d*\.?\d*$/.test(val), { message: "Price must be a valid number" }),
+});
+
+export type InvoiceItem = z.infer<typeof invoiceItemSchema>
+
 export type Invoice = InvoiceInfo & {
   sender: BusinessEntity;
   recipient: BusinessEntity;
+  items: InvoiceItem[]
 };

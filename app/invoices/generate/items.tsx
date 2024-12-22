@@ -7,16 +7,8 @@ import { Button } from "~/components/Button";
 import CustomTextInput from "~/components/CustomTextInput";
 import KeyboardAwareScrollView from "~/components/KeyboardAwareScrollView";
 import { router } from 'expo-router';
-
-const invoiceItemSchema = z.object({
-  name: z.string({ required_error: 'Name is required' }).min(1, 'Name is required'),
-  quantity: z.number({ required_error: 'Quantity is required' }),
-  price: z
-    .string({ required_error: "Required" }).min(1, 'Required')
-    .refine((val) => /^\d*\.?\d*$/.test(val), { message: "Price must be a valid number" }),
-});
-
-// type invoiceItem = z.infer<typeof invoiceItemSchema>
+import { InvoiceItem, invoiceItemSchema } from '~/schema/invoice';
+import { useStore } from '~/store/store';
 
 const itemsSchema = z.object({
   items: invoiceItemSchema.array(),
@@ -25,6 +17,8 @@ const itemsSchema = z.object({
 type Items = z.infer<typeof itemsSchema>
 
 export default function GenerateInvoice() {
+  const addItems = useStore((data) => data.addItems)
+
   const form = useForm<Items>({
     resolver: zodResolver(itemsSchema),
     defaultValues: {
@@ -42,7 +36,8 @@ export default function GenerateInvoice() {
   })
 
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: { items: InvoiceItem[] }) => {
+    addItems(data.items)
     router.push('/invoices/generate/summary')
   };
 
