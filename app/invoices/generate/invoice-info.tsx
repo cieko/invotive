@@ -7,18 +7,12 @@ import { Button } from "~/components/Button";
 import CustomTextInput from "~/components/CustomTextInput";
 import KeyboardAwareScrollView from "~/components/KeyboardAwareScrollView";
 import { router } from 'expo-router';
-
-const invoiceInfoSchema = z.object({
-  invoiceNumber: z
-    .string({ required_error: 'Invoice number is Required' })
-    .min(1, 'Invoice number is required'),
-  date: z.string({ required_error: 'Date is Required' }).min(1, 'Date is required'),
-  dueDate: z.string({ required_error: 'Due Date is Required' }).min(1, 'Due Date is required'),
-})
-
-type InvoiceInfo = z.infer<typeof invoiceInfoSchema>
+import { InvoiceInfo, invoiceInfoSchema } from '~/schema/invoice';
+import { useStore } from '~/store/store';
 
 export default function GenerateInvoice() {
+  const addInvoiceInfo = useStore((data) => data.addInvoiceInfo)
+
   const form = useForm<InvoiceInfo>({
     resolver: zodResolver(invoiceInfoSchema),
     defaultValues: {
@@ -26,7 +20,8 @@ export default function GenerateInvoice() {
     }
   });
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: InvoiceInfo) => {
+    addInvoiceInfo(data)
     router.push('/invoices/generate/items')
   };
 

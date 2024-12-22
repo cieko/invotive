@@ -34,9 +34,9 @@ export default function InvoiceSummary() {
         <View className="rounded-lg bg-gray-50 p-4">
           <Text className="mb-2 text-lg font-semibold">Invoice Details</Text>
           <View className="gap-1">
-            <Text>Invoice #: INV-2023-001</Text>
-            <Text>Date: November 15, 2023</Text>
-            <Text>Due Date: December 15, 2023</Text>
+            <Text>Invoice #: {newInvoice?.invoiceNumber}</Text>
+            <Text>Date: {newInvoice?.date}</Text>
+            <Text>Due Date: {newInvoice?.dueDate}</Text>
           </View>
         </View>
 

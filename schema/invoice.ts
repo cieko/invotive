@@ -8,7 +8,17 @@ export const businessEntityInfoSchema = z.object({
 
 export type BusinessEntity = z.infer<typeof businessEntityInfoSchema>
 
-export type Invoice = {
+export const invoiceInfoSchema = z.object({
+  invoiceNumber: z
+    .string({ required_error: 'Invoice number is Required' })
+    .min(1, 'Invoice number is required'),
+  date: z.string({ required_error: 'Date is Required' }).min(1, 'Date is required'),
+  dueDate: z.string({ required_error: 'Due Date is Required' }).min(1, 'Due Date is required'),
+})
+
+export type InvoiceInfo = z.infer<typeof invoiceInfoSchema>
+
+export type Invoice = InvoiceInfo & {
   sender: BusinessEntity;
   recipient: BusinessEntity;
 };
