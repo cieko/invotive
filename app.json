@@ -4,6 +4,8 @@
     "slug": "invotive",
     "version": "1.0.0",
 
+    "newArchEnabled": true,
+
     "scheme": "invotive",
     "web": {
       "bundler": "metro",
