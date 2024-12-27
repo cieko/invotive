@@ -1,3 +1,4 @@
+import { Link } from "expo-router";
 import { useEffect } from "react";
 import { View, Text } from "react-native";
 import { Button } from "~/components/Button";
@@ -11,9 +12,9 @@ export default function InvoiceSummary() {
   const newInvoice = useStore((data) => data.newInvoice); // this method is to avoid unnecessary re-renderings
   const subTotal = useStore((data) => data.getSubtotal);
 
-  const handleGeneratePDF = () => {
-    generateInvoicePDF(newInvoice as Invoice)
-  }
+  // const handleGeneratePDF = () => {
+  //   // generateInvoicePDF(newInvoice as Invoice)
+  // }
 
   return (
     <KeyboardAwareScrollView>
@@ -90,11 +91,13 @@ export default function InvoiceSummary() {
           </View>
         </View>
 
-        <Button
-          title="Generate Invoice"
-          className="mt-auto"
-          onPress={handleGeneratePDF}
-        />
+        <Link href={'/invoices/generate/success'} asChild>
+          <Button
+            title="Generate Invoice"
+            className="mt-auto"
+            // onPress={handleGeneratePDF}
+          />
+        </Link>
 
       </View>
     </KeyboardAwareScrollView>

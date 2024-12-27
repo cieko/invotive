@@ -142,8 +142,6 @@ const generateHTML = (invoice: Invoice) => {
     </div>
 
   </div>
-    
-
 </body>
 </html>
 `;
@@ -156,7 +154,7 @@ export const generateInvoicePDF = async (invoice: Invoice) => {
     // On iOS/android prints the given html. On web prints the HTML from the current page.
     const { uri } = await printToFileAsync({ html: generateHTML(invoice) });
 
-    const permanentUri = `${FileSystem.documentDirectory}invoice.pdf`;
+    const permanentUri = FileSystem.documentDirectory + `invoice-${invoice.invoiceNumber}.pdf`;
 
     // move to document directory
     await FileSystem.moveAsync({
@@ -164,7 +162,9 @@ export const generateInvoicePDF = async (invoice: Invoice) => {
       to: permanentUri,
     }); // moveAsync doesn't return anything
 
-    await shareAsync(permanentUri, { UTI: '.pdf', mimeType: 'application/pdf' });
+    // await shareAsync(permanentUri, { UTI: '.pdf', mimeType: 'application/pdf' });
+
+    return permanentUri;
   } catch (error) {
     console.log('Error while generating PDF:', error);
   }
