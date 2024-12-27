@@ -1,9 +1,15 @@
-import { Stack, Link } from 'expo-router';
+import { Stack, Link, router } from 'expo-router';
 import React from 'react';
 import { Text, View } from 'react-native';
+import { customEvent } from 'vexo-analytics';
 import { Button } from '~/components/Button';
 
 export default function Home() {
+  const onNewInvoice = () => {
+    customEvent('start_generating_invoice', {});
+    router.push('/invoices/generate');
+  }
+
   return (
     <>
       <Stack.Screen options={{ title: 'Home', headerShown: false }} />
@@ -15,13 +21,9 @@ export default function Home() {
           </Text>
         </View>
 
-        <Link 
-          href={{ pathname: '/invoices/generate' }} 
-          className='w-full shadow-lg shadow-gray-800'
-          asChild 
-          >
-          <Button title='New Invoice' />
-        </Link>
+
+        <Button title='New Invoice' className='w-full shadow-lg shadow-gray-800' onPress={onNewInvoice} />
+
       </View>
     </>
   );

@@ -3,6 +3,7 @@ import { router } from 'expo-router'
 import { shareAsync } from 'expo-sharing';
 import { useEffect, useState } from 'react';
 import { View, Text } from 'react-native'
+import { customEvent } from 'vexo-analytics';
 
 import { Button } from '~/components/Button'
 import { Invoice } from '~/schema/invoice';
@@ -25,6 +26,9 @@ export default function Success() {
 
       if (uri) {
         setPdfUri(uri);
+
+        customEvent('invoice_pdf_generated', {
+        })
       } else {
         throw new Error('Something went wrong while generating PDF');
       }
@@ -42,6 +46,8 @@ export default function Success() {
     }
 
     await shareAsync(pdfUri, { UTI: '.pdf', mimeType: 'application/pdf' });
+    customEvent('invoice_pdf_shared', {
+    })
   }
 
   useEffect(() => {
