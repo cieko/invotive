@@ -60,7 +60,7 @@ export default function InvoiceSummary() {
               <Text className="w-24 text-right font-medium">Total</Text>
             </View>
 
-            {newInvoice.items?.map((item, index) => {
+            {newInvoice?.items?.map((item, index) => {
               return (
                 <View className="flex-row justify-between" key={index}>
                   <Text className="flex-1 font-medium">{item.name}</Text>

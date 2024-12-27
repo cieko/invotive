@@ -18,15 +18,12 @@ type Items = z.infer<typeof itemsSchema>
 
 export default function GenerateInvoice() {
   const addItems = useStore((data) => data.addItems)
+  const items = useStore((data) => data.newInvoice?.items)
 
   const form = useForm<Items>({
     resolver: zodResolver(itemsSchema),
     defaultValues: {
-      items: [{
-        name: '',
-        quantity: 1,
-        price: '',
-      }]
+      items: items || []
     }
   });
 

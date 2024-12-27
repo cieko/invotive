@@ -14,6 +14,7 @@ export default function Success() {
   const [loading, setLoading] = useState(true);
   const [pdfUri, setPdfUri] = useState<string | null>(null);
 
+  const resetNewInvoice = useStore((data) => data.resetNewInvoice);
   const newInvoice = useStore((data) => data.newInvoice); // this method is to avoid unnecessary re-renderings
   const subTotal = useStore((data) => data.getSubtotal);
 
@@ -53,7 +54,7 @@ export default function Success() {
         <View className='mb-8 items-center gap-4'>
           <MaterialCommunityIcons name='loading' size={80} color='gray' />
           <Text className='text-center text-2xl font-bold'>Generating Invoice...</Text>
-          
+
           <Text className='text=center text-gray-600'>
             Please wait while we generate your invoice
           </Text>
@@ -77,7 +78,10 @@ export default function Success() {
         />
         <Button
           title='Back to Home'
-          onPress={() => router.push('/')}
+          onPress={() => {
+            resetNewInvoice();
+            router.push('/');
+          }}
           variant='secondary'
         />
       </View>
