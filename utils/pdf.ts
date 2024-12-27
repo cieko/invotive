@@ -2,8 +2,10 @@ import { printToFileAsync } from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 
 import * as FileSystem from 'expo-file-system';
+import { Invoice } from '~/schema/invoice';
 
-const html = `
+const generateHTML = (invoice: Invoice) => {
+  const html = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -69,8 +71,9 @@ const html = `
     <div class="invoice-header">
       <div>
         <h1>Invoice</h1>
-        <p>Invoice #123</p>
-        <p>Due Date: 2024-04-18</p>
+        <p>Invoice #: ${invoice.invoiceNumber}</p>
+        <p>Date: ${new Date(invoice.date).toLocaleDateString()}</p>
+        ${invoice.dueDate ? `<p>Due Date: ${new Date(invoice.dueDate).toLocaleDateString()}</p>` : null}
       </div>
       <div class="company-logo-container">
         <img src="https://dummyimage.com/150x150/000/fff" alt="Company Logo" class="company-logo">
@@ -80,18 +83,15 @@ const html = `
     <div class="invoice-header">
       <div class="client-info">
         <h3>Bill To:</h3>
-        <p>Client Name</p>
-        <p>Client Address</p>
-        <p>City, State ZIP</p>
-        <p>Phone: (555) 5555-5555</p>
+        <p>${invoice.recipient.name}</p>
+        <p>${invoice.recipient.address}</p>
+        <p>Tax ID: ${invoice.recipient.taxId ?? ''}</p>
       </div>
 
       <div class="company-info">
-        <h2>Your Company Name</h2>
-        <p>Company Address</p>
-        <p>City, State ZIP</p>
-        <p>Phone: (555) 5555-5555</p>
-        <p>Email: company@example.com</p>
+        <h2>${invoice.sender.name}</h2>
+        <p>${invoice.sender.address}</p>
+        <p>Tax ID: ${invoice.sender.taxId ?? ''}</p>
       </div>
       
     </div>
@@ -106,39 +106,29 @@ const html = `
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Item 1</td>
-          <td>2</td>
-          <td>$10.00</td>
-          <td>$20.00</td>
-        </tr>
-        <tr>
-          <td>Item 2</td>
-          <td>1</td>
-          <td>$5.00</td>
-          <td>$5.00</td>
-        </tr>
-        <tr>
-          <td>Item 3</td>
-          <td>3</td>
-          <td>$15.00</td>
-          <td>$45.00</td>
-        </tr>
+        ${invoice.items.map((item) => `
+          <tr>
+            <td>${item.name}</td>
+            <td>${item.quantity}</td>
+            <td>₹ ${item.price}</td>
+            <td>₹ ${new Intl.NumberFormat('en-IN').format(item.quantity * parseFloat(item.price))}</td>
+          </tr>
+        `).join('')}
       </tbody>
     </table>
 
     <div class="totals">
       <div class="total-row">
         <span>Subtotal</span>
-        <span>$70.00</span>
+        <span>₹ ${new Intl.NumberFormat('en-IN').format(invoice.items.reduce((acc, item) => acc + parseFloat(item.price) * item.quantity, 0))}</span>
       </div>
       <div class="total-row">
         <span>Tax (10%)</span>
-        <span>$7.00</span>
+        <span>₹ ${new Intl.NumberFormat('en-IN').format(0.1 * (invoice.items.reduce((acc, item) => acc + parseFloat(item.price) * item.quantity, 0)))}</span>
       </div>
       <div class="total-row">
         <span>Total</span>
-        <span>$77.00</span>
+        <span>₹ ${new Intl.NumberFormat('en-IN').format(1.1 * (invoice.items.reduce((acc, item) => acc + parseFloat(item.price) * item.quantity, 0)))}</span>
       </div>
     </div>
 
@@ -158,10 +148,13 @@ const html = `
 </html>
 `;
 
-export const generateInvoicePDF = async () => {
+  return html;
+}
+
+export const generateInvoicePDF = async (invoice: Invoice) => {
   try {
     // On iOS/android prints the given html. On web prints the HTML from the current page.
-    const { uri } = await printToFileAsync({ html });
+    const { uri } = await printToFileAsync({ html: generateHTML(invoice) });
 
     const permanentUri = `${FileSystem.documentDirectory}invoice.pdf`;
 

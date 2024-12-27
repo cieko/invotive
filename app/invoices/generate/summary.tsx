@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { View, Text } from "react-native";
 import { Button } from "~/components/Button";
 import KeyboardAwareScrollView from "~/components/KeyboardAwareScrollView";
+import { Invoice } from "~/schema/invoice";
 import { useStore } from "~/store/store";
 
 import { generateInvoicePDF } from "~/utils/pdf";
@@ -11,7 +12,7 @@ export default function InvoiceSummary() {
   const subTotal = useStore((data) => data.getSubtotal);
 
   const handleGeneratePDF = () => {
-    generateInvoicePDF()
+    generateInvoicePDF(newInvoice as Invoice)
   }
 
   return (
@@ -80,11 +81,11 @@ export default function InvoiceSummary() {
             </View>
             <View className="flex-row justify-between">
               <Text>Tax (10%)</Text>
-              <Text>₹ 300</Text>
+              <Text>₹ {new Intl.NumberFormat('en-IN').format(0.1 * subTotal())}</Text>
             </View>
             <View className="flex-row justify-between border-t border-dashed border-gray-300 pt-3">
               <Text className="font-semibold">Total</Text>
-              <Text className="font-semibold">₹ {new Intl.NumberFormat('en-IN').format(subTotal() + 300)}</Text>
+              <Text className="font-semibold">₹ {new Intl.NumberFormat('en-IN').format(subTotal() * 1.1)}</Text>
             </View>
           </View>
         </View>
