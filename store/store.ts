@@ -23,8 +23,8 @@ export const useStore = create<InvoiceState>((set, get) => ({
           quantity: 1
         }
       ],
-      date: new Date().toISOString(),
-      dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      date: new Date(),
+      // dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
     }
   }),
   resetNewInvoice: () => set({ newInvoice: null }),

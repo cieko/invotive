@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import { FormProvider, useForm } from "react-hook-form";
 import { Text, View } from "react-native";
@@ -9,6 +10,7 @@ import KeyboardAwareScrollView from "~/components/KeyboardAwareScrollView";
 import { router } from 'expo-router';
 import { InvoiceInfo, invoiceInfoSchema } from '~/schema/invoice';
 import { useStore } from '~/store/store';
+import CustomDatePicker from '~/components/CustomDatePicker';
 
 export default function GenerateInvoice() {
   const addInvoiceInfo = useStore((data) => data.addInvoiceInfo)
@@ -16,7 +18,7 @@ export default function GenerateInvoice() {
   const form = useForm<InvoiceInfo>({
     resolver: zodResolver(invoiceInfoSchema),
     defaultValues: {
-      date: new Date().toDateString(),
+      // date: new Date(),
     }
   });
 
@@ -36,14 +38,14 @@ export default function GenerateInvoice() {
             label="Invoice Number"
             placeholder="Invoice Number"
           />
-          <CustomTextInput
+          <CustomDatePicker
             name="date"
             label="Date"
             placeholder="Date of Generation"
           />
-          <CustomTextInput
+          <CustomDatePicker
             name="dueDate"
-            label="Due Date"
+            label="Due Date (Optional)"
             placeholder="Due Date"
           />
         </View>

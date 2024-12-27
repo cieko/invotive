@@ -72,8 +72,8 @@ const generateHTML = (invoice: Invoice) => {
       <div>
         <h1>Invoice</h1>
         <p>Invoice #: ${invoice.invoiceNumber}</p>
-        <p>Date: ${new Date(invoice.date).toLocaleDateString()}</p>
-        ${invoice.dueDate ? `<p>Due Date: ${new Date(invoice.dueDate).toLocaleDateString()}</p>` : null}
+        <p>Date: ${invoice.date.toLocaleDateString()}</p>
+        ${invoice.dueDate ? `<p>Due Date: ${invoice.dueDate?.toLocaleDateString()}</p>` : null}
       </div>
       <div class="company-logo-container">
         <img src="https://dummyimage.com/150x150/000/fff" alt="Company Logo" class="company-logo">

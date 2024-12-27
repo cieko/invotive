@@ -1,20 +1,18 @@
-import { Link } from "expo-router";
-import { useEffect } from "react";
 import { View, Text } from "react-native";
+import { Link, Redirect } from "expo-router";
 import { Button } from "~/components/Button";
 import KeyboardAwareScrollView from "~/components/KeyboardAwareScrollView";
-import { Invoice } from "~/schema/invoice";
 import { useStore } from "~/store/store";
-
-import { generateInvoicePDF } from "~/utils/pdf";
 
 export default function InvoiceSummary() {
   const newInvoice = useStore((data) => data.newInvoice); // this method is to avoid unnecessary re-renderings
   const subTotal = useStore((data) => data.getSubtotal);
 
-  // const handleGeneratePDF = () => {
-  //   // generateInvoicePDF(newInvoice as Invoice)
-  // }
+  if (!newInvoice) {
+    return (
+      <Redirect href="/" />
+    )
+  }
 
   return (
     <KeyboardAwareScrollView>
@@ -23,8 +21,8 @@ export default function InvoiceSummary() {
           <Text className="text-sm text-stone-400 font-semibold">Invoice Details</Text>
           <View className="gap-1">
             <Text className="text-2xl font-semibold">#{newInvoice?.invoiceNumber}</Text>
-            <Text className="mt-2">Date: {newInvoice?.date}</Text>
-            <Text>Due Date: {newInvoice?.dueDate}</Text>
+            <Text className="mt-2">Date: {newInvoice?.date?.toDateString()}</Text>
+            {newInvoice?.dueDate ? <Text>Due Date: {newInvoice?.dueDate?.toDateString()}</Text> : null}
           </View>
         </View>
 
