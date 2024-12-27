@@ -82,7 +82,7 @@ export default function Success() {
             resetNewInvoice();
             router.push('/');
           }}
-          variant='secondary'
+          variant='link'
         />
       </View>
     </View>

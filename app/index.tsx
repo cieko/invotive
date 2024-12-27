@@ -1,20 +1,28 @@
 import { Stack, Link } from 'expo-router';
 import React from 'react';
-
+import { Text, View } from 'react-native';
 import { Button } from '~/components/Button';
-import { Container } from '~/components/Container';
-import { ScreenContent } from '~/components/ScreenContent';
 
 export default function Home() {
   return (
     <>
       <Stack.Screen options={{ title: 'Home', headerShown: false }} />
-      <Container>
-        <ScreenContent path="app/index.tsx" title="Home" />
-        <Link href={{ pathname: '/invoices/generate' }} asChild>
-          <Button title="New Invoice" />
+      <View className='flex-1 items-center justify-center gap-8 p-8'>
+        <View className='items-center gap-2'>
+          <Text className='text-2xl font-bold'>Invoice Generator</Text>
+          <Text className='text-sm text-center'>
+            Create and share professional invoices in seconds.
+          </Text>
+        </View>
+
+        <Link 
+          href={{ pathname: '/invoices/generate' }} 
+          className='w-full shadow-lg shadow-gray-800'
+          asChild 
+          >
+          <Button title='New Invoice' />
         </Link>
-      </Container>
+      </View>
     </>
   );
 }
